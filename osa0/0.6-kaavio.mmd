@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    
+    Note right of Browser: User writes in a new note and submits it to server
+    Browser->>Server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    activate Server
+    Note right of Server: Server saves the new note and sends back a JSON response
+    Server-->>Browser: {"message":"note created"}
+    deactivate Server
+    
+    Note right of Browser: Browser executes a callback function which re-renders the notes list, including the new note

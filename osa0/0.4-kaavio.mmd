@@ -1,0 +1,40 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    
+    Note right of Browser: User writes in a new note and submits it to server
+    Browser->>Server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
+    activate Server
+    Note right of Server: Server saves the new note and sends back a redirect request
+    Server-->>Browser: 302 Redirect
+    deactivate Server
+    Note right of Browser: Browser redirects to the notes page
+
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate Server
+    Note right of Server: Server sends back HTML file
+    Server-->>Browser: HTML file
+    deactivate Server
+    
+    Note right of Browser: HTML includes reference to CSS file, browser fetches it
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate Server
+    Note right of Server: Server sends back CSS file
+    Server-->>Browser: CSS file
+    deactivate Server
+    
+    Note right of Browser: HTML includes reference to JavaScript file, browser fetches it
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    activate Server
+    Note right of Server: Server sends back JavaScript file
+    Server-->>Browser: JavaScript file
+    deactivate Server
+    
+    Note right of Browser: Browser executes JavaScript which fetches JSON data from Server
+    
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate Server
+    Server-->>Browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
+    deactivate Server    
+
+    Note right of Browser: Browser executes a callback function which renders the notes (including the new note)

@@ -1,0 +1,43 @@
+sequenceDiagram
+    participant Browser
+    participant Server
+    
+    Note right of Browser: User opens the URL in browser and browser sends request to server
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/spa
+    activate Server
+    Note right of Server: Server sends back HTML file
+    Server-->>Browser: HTML file
+    deactivate Server
+
+    Note right of Browser: HTML includes reference to CSS file, browser fetches it
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+    activate Server
+    Note right of Server: Server sends back CSS file
+    Server-->>Browser: CSS file
+    deactivate Server
+    
+    Note right of Browser: HTML includes reference to JavaScript file, browser fetches it
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+    activate Server
+    Note right of Server: Server sends back JavaScript file
+    Server-->>Browser: JavaScript file
+    deactivate Server
+    
+    Note right of Browser: Browser executes JavaScript which fetches JSON data from Server
+    
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
+    activate Server
+    Note right of Server: Server sends back JSON file
+    Server-->>Browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
+    deactivate Server    
+
+    Note right of Browser: Browser executes a callback function that renders the notes list, including the new note
+
+    Note right of Browser: HTML includes reference to favicon file, fetch it
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/favicon.ico
+    activate Server
+    Note right of Server: Server sends back favicon file
+    Server-->>Browser: Favicon file
+    deactivate Server
+    Note right of Browser: Server displays the favicon image in browser tab
+    
