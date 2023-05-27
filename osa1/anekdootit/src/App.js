@@ -43,7 +43,7 @@ const App = () => {
   }
 
   const vote = () => {
-    const newPoints = [ ...points ]
+    const newPoints = [...points]
     newPoints[selected] = points[selected] + 1
     setPoints(newPoints)
     let idx = 0
