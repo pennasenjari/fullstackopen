@@ -36,6 +36,7 @@ const App = () => {
       setLatlng(newCountries[0].latlng)
     } else {
       // Clear old forecast
+      setLatlng([])
       setWeather([])
     }
   }, [countries, countryFilter])
@@ -61,7 +62,7 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Country information</h1>
+        <h1>Country Information</h1>
         <Filter handleFilterChange={handleFilterChange} countryFilter={countryFilter} setCountryFilter={setCountryFilter} />
         <Countries filteredCountries={filteredCountries} countryFilter={countryFilter} setCountryFilter={setCountryFilter} />
         <Country filteredCountries={filteredCountries} />

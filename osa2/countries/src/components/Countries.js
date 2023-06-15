@@ -9,6 +9,8 @@ const Countries = ({filteredCountries, countryFilter, setCountryFilter}) => {
       null
     : filteredCountries.length < 1 ?
       <div>No matches, specify another filter</div> 
+    : filteredCountries.length === 1 ?
+      null
     : filteredCountries.length > 10 ?
       <div>Too many matches, specify another filter</div> 
     : filteredCountries.map(filteredCountry => (
