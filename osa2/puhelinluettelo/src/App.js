@@ -75,7 +75,8 @@ const App = () => {
           flashMessage(`${newName} added.`, 'note')
       })
       .catch(error => {
-        flashMessage(`An error orccurred.`, 'error')
+        console.log(error.response.data.error)
+        flashMessage(error.response.data.error, 'error')
       })
     }
   }
