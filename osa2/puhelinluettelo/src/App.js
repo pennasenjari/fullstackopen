@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -36,7 +36,7 @@ const App = () => {
     /* Using case-insensitive comparison to check if person exists. */
     const existingPerson = persons.find(p => p.name.toLowerCase() === newName.toLowerCase())
     if (newName === '' || newNumber === '') {
-      flashMessage(`Both name and number are required.`, 'error')
+      flashMessage('Both name and number are required.', 'error')
       return
     } else if (existingPerson) {
       if (window.confirm(`${newName} is already in phonebook. Replace the old number with a new one?`)) {
@@ -56,7 +56,7 @@ const App = () => {
               }))
               flashMessage(`${newName} was already removed from server.`, 'error')
             } else {
-              flashMessage(`An error orccurred.`, 'error')
+              flashMessage('An error orccurred.', 'error')
             }
           })
       }
@@ -73,11 +73,11 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           flashMessage(`${newName} added.`, 'note')
-      })
-      .catch(error => {
-        console.log(error.response.data.error)
-        flashMessage(error.response.data.error, 'error')
-      })
+        })
+        .catch(error => {
+          console.log(error.response.data.error)
+          flashMessage(error.response.data.error, 'error')
+        })
     }
   }
 
@@ -85,7 +85,7 @@ const App = () => {
     if (window.confirm(`Delete ${name}?`)) {
       personService
         .deleteMe(id)
-        .then((response) => {
+        .then(() => {
           setPersons(persons.filter(function(person) { 
             return person.id !== id
           }))
@@ -98,7 +98,7 @@ const App = () => {
             }))
             flashMessage(`${name} was already removed from server.`, 'error')
           } else {
-            flashMessage(`An error orccurred.`, 'error')
+            flashMessage('An error orccurred.', 'error')
           }
         })
     }
