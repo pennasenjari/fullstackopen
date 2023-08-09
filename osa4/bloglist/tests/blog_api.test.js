@@ -162,7 +162,7 @@ describe('adding a new blog', () => {
 
 describe('deleting a blog', () => {
 
-  test('success with status 200', async () => {
+  test('succeeds with status code 204 if id is valid', async () => {
     const blogs = await helper.blogsInDb()
 
     await api
@@ -172,7 +172,7 @@ describe('deleting a blog', () => {
 })
 
 describe('modifying a blog', () => {
-  test('adding likes by one', async () => {
+  test('likes can be added', async () => {
     const blogs = await helper.blogsInDb()
     let newBlog = blogs[0]
     const newLikes = newBlog.likes + 1
