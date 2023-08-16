@@ -2,7 +2,10 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog
+    .find({})
+    .populate('user', 'username name')
+
   res.json(blogs)
 })
 
@@ -17,14 +20,41 @@ blogsRouter.get('/:id', async (req, res) => {
 })
 
 blogsRouter.post('/', async (req, res) => {
-  const blog = new Blog(req.body)
-  await blog.save()
-  res.status(201).send(blog)
+  const body = req.body
+  const user = req.user
+
+  const blog = new Blog({
+    title: body.title,
+    author: body.author,
+    url: body.url,
+    likes: body.likes,
+    user: user._id
+  })
+
+  const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
+
+  res.status(201).send(savedBlog)
 })
 
 blogsRouter.delete('/:id', async (req, res) => {
-  await Blog.findByIdAndRemove(req.params.id)
-  res.status(204).end()
+  const blog = await Blog.findById(req.params.id)
+  const user = req.user
+
+  if (!user) {
+    return res.status(404).json({ error: 'user not found' })
+  }
+  if (!blog) {
+    return res.status(404).json({ error: 'blog not found' })
+  }
+  if (user._id.toString() === blog.user.toString()) {
+    await Blog.findOneAndDelete({ _id: req.params.id })
+    res.status(204).end()
+  } else {
+    return res.status(401).json({ error: 'access denied' })
+  }
+
 })
 
 blogsRouter.put('/:id', async (req, res) => {
