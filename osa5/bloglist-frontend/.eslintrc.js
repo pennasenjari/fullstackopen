@@ -22,7 +22,7 @@ module.exports = {
     }
   ],
   'parserOptions': {
-    'ecmaVersion': 'latest',
+    'ecmaVersion': 2020,
     'ecmaFeatures': {
       'jsx': true
     },

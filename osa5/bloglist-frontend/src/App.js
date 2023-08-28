@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -9,13 +9,11 @@ import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -36,21 +34,12 @@ const App = () => {
     const blogs = await blogService.getAll()
     setBlogs(blogs)
   }
-
-  const addBlog = async (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
-    }
-
+ 
+  const createBlog = async(blogObject) => {
+    blogFormRef.current.toggleVisibility()
     try {
       const createdBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(createdBlog))
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
       flashMessage(`A new blog '${createdBlog.title}' by ${createdBlog.author} created`, '')
     } catch (exception) {
       if (exception.response.data.error) {
@@ -59,18 +48,6 @@ const App = () => {
         flashMessage('An error occurred', 'error')
       }
     }
-  }
-
-  const handleTitleChange = (event) => {
-    setNewTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setNewAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setNewUrl(event.target.value)
   }
 
   const handleLogin = async (event) => {
@@ -113,7 +90,7 @@ const App = () => {
         <input
           type="text"
           value={username}
-          name="Userna2020me"
+          name="Username"
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
@@ -131,16 +108,8 @@ const App = () => {
   )
  
   const blogForm = () => (
-    <Togglable buttonLabel="Create blog">
-      <BlogForm
-        onSubmit={addBlog}
-        newTitle={newTitle}
-        newAuthor={newAuthor}
-        newUrl={newUrl}
-        handleTitleChange={handleTitleChange}
-        handleAuthorChange={handleAuthorChange}
-        handleUrlChange={handleUrlChange}
-      />
+    <Togglable buttonLabel="Add new blog" ref={blogFormRef} >
+      <BlogForm createBlog={createBlog} />
     </Togglable>
   )
 

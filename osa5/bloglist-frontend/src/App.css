@@ -32,3 +32,8 @@ button {
   padding: 4px;
   margin: 4px;
 }
+
+.textbox {
+  border: 1px solid green;
+  margin-top: 4px;
+}
