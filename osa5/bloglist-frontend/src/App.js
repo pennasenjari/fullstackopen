@@ -39,6 +39,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     try {
       const createdBlog = await blogService.create(blogObject)
+      console.log(createdBlog)
       setBlogs(blogs.concat(createdBlog))
       flashMessage(`A new blog '${createdBlog.title}' by ${createdBlog.author} created`, '')
     } catch (exception) {
@@ -108,7 +109,7 @@ const App = () => {
   )
  
   const blogForm = () => (
-    <Togglable buttonLabel="Add new blog" ref={blogFormRef} >
+    <Togglable buttonLabel="Create new" ref={blogFormRef} >
       <BlogForm createBlog={createBlog} />
     </Togglable>
   )

@@ -1,24 +1,20 @@
 import { useState } from 'react'
 
 const Blog = ( {blog} ) => { 
-  const [showAll, setShowAll] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
 
   return (
-    <div>
-      {showAll ? 
-        <div className='textbox'>
-          Title: {blog.title}<br />
+    <div className='textbox'>
+      {blog.title} <button onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'Hide' : 'View'}</button><br />
+      {showDetails ? 
+        <div>
           Author: {blog.author}<br />
           URL: {blog.url}<br />
-          Likes: {blog.likes} <button>Like</button>
-        </div>  
-        :
-        <div className='textbox'>
-          {blog.title}
-        </div>  
-      }
-      <button onClick={() => setShowAll(!showAll)}>{showAll ? 'Hide' : 'View'}</button>
-    </div>
+          Likes: {blog.likes} <button>Like</button><br />
+          {blog.user ? `Added by: ${blog.user.name}` : null}
+        </div>
+        : null}
+    </div>  
   )
 }
 
