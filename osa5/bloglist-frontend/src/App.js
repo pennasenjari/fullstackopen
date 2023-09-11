@@ -32,14 +32,15 @@ const App = () => {
 
   const getBlogs = async () => {
     const blogs = await blogService.getAll()
+    blogs.sort((a, b) => b.likes - a.likes) // sort descending by likes
     setBlogs(blogs)
   }
  
   const createBlog = async(blogObject) => {
     blogFormRef.current.toggleVisibility()
+
     try {
       const createdBlog = await blogService.create(blogObject)
-      console.log(createdBlog)
       setBlogs(blogs.concat(createdBlog))
       flashMessage(`A new blog '${createdBlog.title}' by ${createdBlog.author} created`, '')
     } catch (exception) {
@@ -48,6 +49,33 @@ const App = () => {
       } else {
         flashMessage('An error occurred', 'error')
       }
+    }
+  }
+
+  const removeBlog = async(blog) => {
+
+    try {
+      blogService.remove(blog.id)
+      const newBlogs = blogs.filter((keepBlog) => keepBlog.id !== blog.id)
+      setBlogs(newBlogs)
+      flashMessage(`Blog '${blog.title}' removed`, '')
+    } catch (exception) {
+      flashMessage('An error occurred. Blog could not be removed.', 'error')
+    }
+  }
+
+  const likeBlog = async(blog) => {
+
+    try {
+      let blogsCopy = JSON.parse(JSON.stringify(blogs)) // deep copy
+      let editBlog = blogsCopy.filter((myBlog) => myBlog.id === blog.id)[0]
+      editBlog.likes++
+      if (await blogService.update(blog.id, editBlog)) {
+        getBlogs()
+      }
+      flashMessage(`Blog '${blog.title}' liked`, '')
+    } catch (exception) {
+      flashMessage('An error occurred. Blog could not be liked.', 'error')
     }
   }
 
@@ -133,7 +161,9 @@ const App = () => {
           {blogs.map((blog, i) => 
             <Blog
               key={i}
-              blog={blog} 
+              blog={blog}
+              removeBlog={removeBlog}
+              likeBlog={likeBlog}
             />
           )}
         </div>
